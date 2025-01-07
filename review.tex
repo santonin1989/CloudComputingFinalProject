@@ -135,7 +135,7 @@ Dueling Double Deep Q-Network (D3QN) is an improvement over the Deep Q-Network (
 \end{equation}
 
 By using this approach, D3QN provides a more stable learning signal, especially in situations where states are similar but actions differ.
-\item \textbf{Experience Replay and Target Network}:D3QN continues to utilize the experience replay mechanism and target network from DQN to further enhance learning stability.~\cite{pyyz003}Experience replay breaks the correlations between consecutive data points by randomly sampling from a replay buffer, while the target network is updated periodically to reduce fluctuations during training.
+\item \textbf{Experience Replay and Target Network}:D3QN continues to utilize the experience replay mechanism and target network from DQN to further enhance learning stability~\cite{pyyz003}.Experience replay breaks the correlations between consecutive data points by randomly sampling from a replay buffer, while the target network is updated periodically to reduce fluctuations during training.
 \item \textbf{Performance Improvement}:Experiments have shown that D3QN performs exceptionally well in various reinforcement learning tasks, particularly in environments that require handling complex state and action spaces. By combining Double Q-learning and the dueling network architecture, D3QN converges to optimal policies more quickly and improves overall performance.
 \end{itemize}
 
