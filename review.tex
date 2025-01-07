@@ -45,7 +45,7 @@ Edge Computing, Task Offloading, Reinforcement Learning, Multi-Agent Reinforceme
 \IEEEPARstart{E}{dge} computing refers to a distributed and open platform that integrates the core capabilities of networking, 
 computing, storage, and applications on the network edge side close to the data source. 
 It provides edge intelligence services nearby to meet the key requirements of industry digitalization in aspects such as agile connection, 
-real-time services, data optimization, application intelligence, security, and privacy protection~\cite{7807196}. 
+real-time services, data optimization, application intelligence, security, and privacy protection~\cite{zheng01}. 
 Traditional cloud computing generally centralizes data in data centers for processing, 
 while edge computing assigns some computing tasks to the network edge for processing, handling data where it is generated.
 
@@ -67,14 +67,14 @@ To further improve the processing efficiency, task offloading has emerged.
 
 Task offloading means transferring the computing tasks of a device to other devices or 
 servers with stronger computing capabilities for processing. 
-It is common to offload the tasks of mobile devices to edge servers or the cloud~\cite{7762913}.
+It is common to offload the tasks of mobile devices to edge servers or the cloud~\cite{zheng03}.
 
 However, in actual dynamic environments, task offloading faces numerous challenges:
 
 \begin{itemize}
-    \item \textbf{Latency Challenge}: In dynamic environments, the network state can change at any time. Situations such as network congestion and unstable signals may lead to a significant increase in data transmission latency. For example, in the Internet of Vehicles scenario, vehicles are in a high-speed moving state and network connections are constantly switching. During the process of offloading tasks from vehicles to edge servers or the cloud, it is difficult to predict and control the data transmission latency \cite{8016573}.
+    \item \textbf{Latency Challenge}: In dynamic environments, the network state can change at any time. Situations such as network congestion and unstable signals may lead to a significant increase in data transmission latency. For example, in the Internet of Vehicles scenario, vehicles are in a high-speed moving state and network connections are constantly switching. During the process of offloading tasks from vehicles to edge servers or the cloud, it is difficult to predict and control the data transmission latency \cite{zheng02}.
 
-    \item \textbf{Energy Consumption Challenge}: Although offloading tasks to external computing resources can utilize stronger computing capabilities, the energy consumption issue during the task offloading process also needs to be considered. Packaging and transmitting data as well as interacting with external resources all consume energy. Especially for mobile devices with limited battery power, an unreasonable task offloading strategy may cause a sharp increase in device energy consumption and shorten the device's battery life \cite{9319727}.
+    \item \textbf{Energy Consumption Challenge}: Although offloading tasks to external computing resources can utilize stronger computing capabilities, the energy consumption issue during the task offloading process also needs to be considered. Packaging and transmitting data as well as interacting with external resources all consume energy. Especially for mobile devices with limited battery power, an unreasonable task offloading strategy may cause a sharp increase in device energy consumption and shorten the device's battery life \cite{zheng04}.
 
     \item \textbf{Device Heterogeneity Challenge}: The development of mobile devices and the Internet of Things has led to an increasingly diverse range of devices, with huge differences in hardware architectures, computing capabilities, storage capacities, and so on. This heterogeneity has caused two main problems. 
     \begin{itemize}
@@ -91,28 +91,94 @@ Against this background, reinforcement learning, as a powerful machine learning 
 
 The core of reinforcement learning lies in the fact that an agent interacts with the environment, 
 continuously tries different actions, and learns the optimal strategy based on the obtained reward feedback, 
-so as to maximize the cumulative reward in the long term~\cite{1998Reinforcement}. 
+so as to maximize the cumulative reward in the long term~\cite{zheng05}. 
 This learning mode is inherently suitable for the dynamically changing task offloading scenarios 
 because it can dynamically adjust task offloading decisions according to the real-time environmental states 
 (such as network conditions, device loads, etc.), achieving self-adaptation to complex environments.
 
-For example, when dealing with the latency issue, the reinforcement learning algorithm can, through continuous trial-and-error learning, choose to offload tasks to local devices, edge servers, or the cloud according to the real-time latency situation of the current network, so as to ensure that the overall task execution latency is minimized~\cite{9310745}.
+For example, when dealing with the latency issue, the reinforcement learning algorithm can, through continuous trial-and-error learning, choose to offload tasks to local devices, edge servers, or the cloud according to the real-time latency situation of the current network, so as to ensure that the overall task execution latency is minimized~\cite{zheng06}.
 
 Through continuous learning and optimization, reinforcement learning can help agents find near-optimal task offloading strategies, providing a powerful technical support for solving the difficulties faced by task offloading in dynamic environments. It is expected to become a key tool for promoting the development of edge computing task offloading technology.
 
 \section{Research Status of Reinforcement Learning in Task Offloading}
 
 \subsection{The Foundation of Reinforcement Learning}
+The theory of reinforcement learning provides a normative account1, deeply rooted in psychological2 and neuroscientific3 perspectives on animal behaviour, of how agents may optimize their control of an environment. To use reinforcement learning successfully in situations approaching real-world complexity, however, agents are confronted with a difficult task: they must derive efficient representations of the environment from high-dimensional sensory inputs, and use these to generalize past experience to new situations.While reinforcement learning agents have achieved some successes in a variety of domains, their applicability has previously been limited to domains in which useful features can be handcrafted, or to domains with fully observed, low-dimensional state spaces. To address this issue, researchers proposed the Deep Q-Network (DQN), which combines deep learning with Q-learning to enable effective decision-making in complex environments~\cite{pyyz001}.
+
+DQN uses one particularly successful architecture, the deep convolutional network17, which uses hierarchical layers of tiled convolutional filters to mimic the effects of receptive fields—inspired by Hubel and Wiesel’s seminal work on feedforward processing in early visual cortex18—thereby exploiting the local spatial correlations present in images, and building in robustness to natural transformations such as changes of viewpoint or scale.
+
+Reinforcement learning is known to be unstable or even to diverge when a nonlinear function approximator, such as a neural network, is used to represent the action-value (Q) function. This instability has several causes, including the correlations present in the sequence of observations, the fact that small updates to Q may significantly change the policy and therefore change the data distribution, and the correlations between the action-values (Q) and the target values. There is a novel variant of Q-learning that employs two key ideas:
+
+\begin{itemize}
+\item \textbf{Experience Replay}: This biologically inspired mechanism randomizes the data, thereby removing correlations in the observation sequence and smoothing over changes in the data distribution. Furthermore, this mechanism stores the agent's experiences (state, action, reward, next state) in a replay buffer. During training, small batches of samples are randomly drawn from this buffer to update the network, breaking the correlations between consecutive data points and improving learning efficiency.
+\item \textbf{Iterative Update}: This method adjusts the action-values (Q) towards target values that are only periodically updated, thereby reducing correlations with the target. 
+\end{itemize}
+
+To stabilize the training process, DQN employs the concept of a target network. The weights of the target network are updated periodically (e.g., every few steps) to reduce fluctuations in the Q-values. By using a target network, DQN maintains a relatively stable target during updates, which enhances learning stability and convergence speed.The training process of DQN includes the following steps:
+
+\subsubsection{Action Selection}The agent selects an action based on the current state, typically using an $\epsilon$-greedy strategy, where it randomly selects an action with a certain probability (exploration) and selects the action with the highest Q-value with a certain probability (exploitation).
+
+\subsubsection{Action Execution}The agent executes the selected action in the environment and observes the next state and reward.
+
+\subsubsection{Experience Storage}The current experience state,action,reward,nextstate is stored in the replay buffer.
+
+\subsubsection{Q-value Update}A small batch of samples is randomly drawn from the replay buffer, and the Q-values are updated using the Bellman equation. Specifically, DQN updates the network weights by minimizing the mean squared error of the Q-values.
+
+The success of DQN demonstrates the potential of combining deep learning with reinforcement learning, laying the foundation for subsequent research. This method not only achieved significant results in gaming but also inspired applications in other fields, such as robotics and autonomous driving.
+
+Dueling Double Deep Q-Network (D3QN) is an improvement over the Deep Q-Network (DQN) designed to enhance the learning efficiency and stability of reinforcement learning in complex environments. D3QN combines the advantages of Double Q-learning and the dueling network architecture, primarily consisting of the following key points:
+
+\begin{itemize}
+\item \textbf{Double Q-Learning}:D3QN introduces the concept of Double Q-learning to address the overestimation problem of Q-values in traditional Q-learning. By using two independent Q-networks (the main network and the target network), D3QN selects actions using one network and evaluates the value of those actions using the other network, thereby reducing bias in the Q-values.
+\item \textbf{Dueling Network Architecture}:D3QN employs a dueling network architecture that decomposes the Q-value function into two components: the state value function (V) and the advantage function (A)~\cite{pyyz002}. This decomposition allows the network to better capture the relative value of different actions. Specifically, the Q-value can be expressed as: \begin{equation}
+    \mathit{Q}(s, a) = \mathit{V}(s) + \mathit{A}(s, a)
+\end{equation}
+
+By using this approach, D3QN provides a more stable learning signal, especially in situations where states are similar but actions differ.
+\item \textbf{Experience Replay and Target Network}:D3QN continues to utilize the experience replay mechanism and target network from DQN to further enhance learning stability. ~\cite{pyyz003}Experience replay breaks the correlations between consecutive data points by randomly sampling from a replay buffer, while the target network is updated periodically to reduce fluctuations during training.
+\item \textbf{Performance Improvement}:Experiments have shown that D3QN performs exceptionally well in various reinforcement learning tasks, particularly in environments that require handling complex state and action spaces. By combining Double Q-learning and the dueling network architecture, D3QN converges to optimal policies more quickly and improves overall performance.
+\end{itemize}
 
 \subsection{Applications of Classical Reinforcement Learning}
+Q-learning The breakthrough in Machine Learning (ML) techniques and the popularity of the Internet of Things (IoT) has increased interest in applying Artificial Intelligence (AI) techniques to the new paradigm of Edge Computing. One of the challenges in edge computing architectures is the optimal distribution of the generated tasks between the devices in each layer (i.e., cloud-fog-edge)~\cite{pyyz004}.
+
+To make efficient use of devices in edge computing architecture, it is necessary to use a computational offloading framework that optimizes the allocation of tasks to computing devices in the best possible way. The procedure for deciding the best allocation of tasks to devices is called “task assignment problem”and is a combinatorial optimization problem defined as the process of determining where the computation of each task is performed in order to minimize certain parameters, such as the aforementioned latency and energy consumption, an important topic for an eco-friendly future~\cite{pyyz006} and a key component of the green computing philosophy.
+
+The task assignment problem (TAP) can be formulated as a Generalized Assignment Problem (GAP)~\cite{pyyz007}, which is an NP-hard. Among the traditional methods for solving GAP, new methods based on dynamic programming and machine learning techniques have emerged, such as reinforcement learning (RL) and neural network reinforcement learning (Deep RL). Reinforcement learning optimizes task offloading through the following key aspects:
+
+\begin{itemize}
+\item \textbf{Definition of State and Action}:Researchers define a state space that includes various factors such as the device's computing capability, network latency, task size, and complexity. This state information helps the agent understand the characteristics of the current environment, enabling it to make more informed decisions. The action space includes different offloading strategies, such as choosing to process tasks locally, offloading tasks to edge servers, or selecting different edge servers for processing. By defining multiple possible actions, the agent can explore various offloading strategies.
+\item \textbf{Reward Mechanism}:Researchers design a reward mechanism aimed at encouraging the agent to select offloading strategies that minimize latency and energy consumption. After executing each action, the agent receives corresponding rewards or penalties based on task completion time, energy consumption, and other performance metrics. This feedback mechanism prompts the agent to continuously adjust its strategy to optimize overall performance.
+\item \textbf{Multi-Layer Guided Mechanism}:The multi-layer guided mechanism proposed allows the agent to learn at different decision-making levels. Each layer's guiding strategy targets specific task features and environmental states, helping the agent learn and make decisions more effectively in complex task offloading scenarios. This hierarchical structure enables the agent to converge to the optimal strategy more quickly.
+\item \textbf{Reinforcement Learning Algorithm}:Specific reinforcement learning algorithms (such as Q-learning or Deep Q-Networks) can train the agent. Through interaction with the environment, the agent continuously updates its strategy to adapt to the dynamically changing edge computing environment.
+\end{itemize}
+
+All innovation comes with challenges, and IoT and mobile technologies are no exception. One of them is the latency problem, some mobile applications, such as autonomous driving or virtual reality, need to meet a maximum delay requirement, so in some cases it is not possible to send the data to the cloud. Reinforcement learning has the following advantages in addressing these issues:
+
+\subsubsection{Adaptability}
+Reinforcement learning can dynamically adjust its strategy based on changes in the environment. In edge computing, network conditions, device loads, and user demands may change frequently, and reinforcement learning can learn and adapt in real-time to optimize task offloading and resource allocation.
+
+\subsubsection{Efficient Resource Management}
+Edge computing often faces challenges with limited resources. Reinforcement learning can learn optimal resource allocation strategies to maximize resource utilization, reduce latency, and minimize energy consumption. For example, agents can learn how to select the most suitable computing node to process tasks under different network conditions.
+
+\subsubsection{Online Learning Capability}
+Reinforcement learning can learn during operation, meaning it can continuously update and optimize its strategy in edge computing environments without needing offline training. This online learning capability allows the system to quickly adapt to new tasks and changes in the environment.
+
+\subsubsection{Reduced Communication Overhead}
+In edge computing, transmitting data to the cloud for processing can lead to high latency and bandwidth consumption. By using reinforcement learning on edge devices, agents can decide when and how to offload tasks, thereby reducing unnecessary communication overhead.
+
+\subsubsection{Support for Multi-task Processing}
+There may be multiple tasks occurring simultaneously in edge computing environments. Reinforcement learning can learn how to effectively schedule and allocate resources among multiple tasks to achieve higher system throughput and efficiency.
+
+Through these methods, reinforcement learning achieves an adaptive and intelligent decision-making process in task offloading, allowing edge computing systems to handle tasks more efficiently. In the future, people may explore alternatives of knowledge transfer and federated learning to develop distributed decision systems in 5G networks and Computing Continuum paradigm~\cite{pyyz008}. Another promising future research direction is to apply neural networks to improve the performance of Q-Learning, thus overcoming some limitations such as a low number of states and discrete variables.
 
 \subsection{Applications of Deep Reinforcement Learning}
 
 In the research on task offloading, enhanced reinforcement learning methods have also been continuously developed and innovated. Here, we mainly introduce two methods. One is the Double Dueling DQN (D3QN), which demonstrates unique advantages in solving offloading problems in highly dynamic environments. The other is Multi-Agent Reinforcement Learning (MARL), which plays an important role in edge collaboration scenarios.
 
 Edge computing networks face difficulties such as limited device resources and dynamic environmental changes. 
-Zhang et al.~\cite{zhang2023clustering} modeled the online offloading problem as a Markov Decision Process (MDP) and, 
-on this basis, proposed the C - D3QN algorithm~\cite{zhang2023clustering}. 
+Zhang et al.~\cite{zheng07} modeled the online offloading problem as a Markov Decision Process (MDP) and, 
+on this basis, proposed the C - D3QN algorithm~\cite{zheng07}. 
 This algorithm combines the D3QN algorithm with a clustering algorithm and effectively improves the 
 decision-making performance in highly dynamic environments by introducing a double dueling mechanism.
 
@@ -128,9 +194,9 @@ Experiments show that the C - D3QN algorithm has obvious advantages over DQN in 
 
 As the scale of edge computing expands, the collaboration among edge nodes becomes increasingly important. Multi-Agent Reinforcement Learning (MARL) can better cope with complex edge collaboration scenarios through the interaction and collaboration among multiple agents.
 
-In edge computing task offloading, different edge servers or devices can be regarded as different agents. They work together to complete the offloading tasks while also taking into account factors such as the communication costs and differences in computing capabilities among different devices and servers~\cite{9485089}. The MARL approach allows each agent to make decisions based on its own observations and local information, and at the same time communicate and collaborate with other agents to gradually achieve the globally optimal collaboration strategy.
+In edge computing task offloading, different edge servers or devices can be regarded as different agents. They work together to complete the offloading tasks while also taking into account factors such as the communication costs and differences in computing capabilities among different devices and servers~\cite{zheng08}. The MARL approach allows each agent to make decisions based on its own observations and local information, and at the same time communicate and collaborate with other agents to gradually achieve the globally optimal collaboration strategy.
 
-However, MARL also faces challenges. Conflicts of interest among agents may lead to difficulties in collaboration, and an increase in the number of agents causes the state and action spaces to grow exponentially, resulting in the "curse of dimensionality" and increasing the computational complexity and convergence difficulty. To address these challenges, researchers have proposed various solutions. A reasonable reward mechanism can adjust the reward function, rewarding agents that actively collaborate and punishing selfish behaviors, prompting them to pursue their own interests while achieving the goals of the system~\cite{9126253}. The hierarchical MARL architecture divides agents into different layers, with higher-level agents coordinating lower-level ones, reducing complexity and improving collaboration efficiency~\cite{9477423}.
+However, MARL also faces challenges. Conflicts of interest among agents may lead to difficulties in collaboration, and an increase in the number of agents causes the state and action spaces to grow exponentially, resulting in the "curse of dimensionality" and increasing the computational complexity and convergence difficulty. To address these challenges, researchers have proposed various solutions. A reasonable reward mechanism can adjust the reward function, rewarding agents that actively collaborate and punishing selfish behaviors, prompting them to pursue their own interests while achieving the goals of the system~\cite{zheng09}. The hierarchical MARL architecture divides agents into different layers, with higher-level agents coordinating lower-level ones, reducing complexity and improving collaboration efficiency~\cite{zheng10}.
 
 In practical applications, MARL algorithms can support edge devices to coordinate the allocation of task shares and resource utilization in real time. They can also assist vehicles and Roadside Units (RSUs) in sharing traffic information and facilitating task offloading. In the future, MARL algorithms are also expected to play a significant role in the Internet of Things.
 
