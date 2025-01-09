@@ -17,7 +17,7 @@
 
 \title{Task Offloading of Edge Computing Based on Reinforcement Learning: A Survey}
 
-\author{Pu Yangyizhen, Xie Yijie, Zheng Tongzhou, Zhou Xufei}
+\author{Pu Yangyizhen, Xie Yijie, Zheng Tongzhou, Zhou Xufei \\ (in alphabetical order of pinyin)}
         % <-this % stops a space
 % \thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}
 % <-this % stops a space
@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-abstract here
+Edge computing integrates multiple core capabilities on the network edge close to the data source. However, the growth of device data processing and task requirements has brought challenges, leading to the emergence of task offloading. This paper focuses on task offloading in edge computing based on reinforcement learning and elaborates on its research status. In terms of the foundation of reinforcement learning, it expounds the principles and advantages of deep Q-network (DQN) and its improved algorithms such as dueling double deep Q-network (D3QN). In the application aspect, it covers the applications of classical reinforcement learning (such as Q-learning) and deep reinforcement learning (such as D3QN, multi-agent reinforcement learning MARL) in task offloading, including key elements such as the definition of state and action and reward mechanisms. For reinforcement learning methods, it introduces multiple optimization methods such as DOQO and TRL framework and strategies for compressing action and state spaces. It also analyzes the challenges such as scenario design and algorithm complexity and looks ahead to future development directions such as efficient algorithm design and multi-objective optimization, providing a comprehensive reference for the research and application of edge computing task offloading technology.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -205,7 +205,7 @@ In conclusion, the applications of Double Dueling DQN and Multi-Agent Reinforcem
 
 \section{Optimization and Innovation of Reinforcement Learning Methods}
 
-\subsection{Method optimization}
+\subsection{Method Optimization}
 
 The task offloading technology plays a crucial role in edge computing systems, directly impacting both system efficiency and user experience. However, in real-world applications, task offloading faces several challenges, particularly in the context of delay-sensitive tasks. In areas such as autonomous driving and healthcare, task deadlines are stringent, and any delays may result in serious consequences. Additionally, the heterogeneity of devices and tasks introduces significant complexity to task offloading. Differences in resource capacities, task complexity, and data characteristics complicate the formulation of a unified offloading strategy. Achieving a balance between generic policies and individualized requirements remains a significant challenge, as centralized policy training, despite its low overhead, lacks specificity, while individualized policies incur high training costs. The cold-start problem further exacerbates these issues; newly introduced devices may not be covered by existing policies, requiring retraining and adding to system overhead.
 
@@ -246,10 +246,31 @@ Despite its advantages, MRLCO's performance still falls short of the optimal sol
 
 To further optimize existing methods, it is essential to develop fine-grained task offloading models. For instance, task decomposition based on Directed Acyclic Graphs (DAGs) could enhance decision-making capabilities when combined with policy gradient learning.~\cite{zhou03} Additionally, research should focus on addressing the impact of high device mobility and dynamic network environments on task offloading performance to improve algorithm adaptability in real-world scenarios~\cite{zhou01, zhou02}. Lastly, multi-objective optimization techniques should be prioritized to balance delay, energy consumption, and resource utilization, ultimately enhancing offloading efficiency and system stability in edge computing environments.~\cite{zhou03}
 
-\subsection{Compression of action space and state space}
+\subsection{Compression of Action Space and State Space}
+
+With limited resources of mobile devices, the action space and state space compression are crucial for efficiently managing the complexity of the task offloading problem in cloud-edge computing environments. Compressing these spaces simplifies the decision-making process,making it computationally feasible. And a smaller state space helps machine learning models generalize better, improving reliability. Besides, compression is key to managing increased complexity without overwhelming resources as system grows, and reducing the action space helps in creating a more unified approach to handle diverse devices and tasks. Here are some detailed methods of how these spaces are compressed:
+
+\subsubsection{Definition of Action Space and State Space}
+In the context of edge offloading, the action space typically encompasses the choices of executing tasks either on local devices or offloading them to various edge nodes, and The state space typically includes information such as the current state of the tasks, the state of the edge nodes (e.g., resource utilization), and network conditions (e.g., transmission delay, bandwidth)..This definition is mentioned in this paper, where the action space is defined as \(A=\{\textit{taskMD}_1,\textit{taskES}_1,\textit{taskCS}_1,\ldots,\textit{taskMD}_n,\textit{taskES}_n,\textit{taskCS}_n\}\), indicating that tasks can be executed on mobile devices (MD), edge servers (ES), or cloud servers (CS). And the state space is defined as \textit{S} , which includes computational capabilities \textit{F} , data transmission rates \textit{V} , and task scheduling \textit{DEPt} ~\cite{zhou01}. The papers addresses the challenge of a large action space by:
+
+\subsubsection{Clustering and Preprocessing}
+A Clustering-based Deep Reinforcement Learning Algorithm(C-D3QN)is proposed. By using clustering algorithms to preprocess the action space,terminal devices are divided into multiple device clusters,with each cluster taking the same action as a whole.This reduces the action space from\((M+1)^N\)to\((M+1)^k\), where\(N\)is the number of terminal devices, \(k\)is the number of cluster centers,and\(M\)is the number of edge servers~\cite{zhou03}. The clustering algorithm groups terminal devices with similar characteristics together,and the state of each device cluster can be represented by the state of the cluster center,thereby reducing the number of states that need to be processed and lowering the dimensionality of the state space. \\ Besides, by merging multiple workflows into one large workflow and assigning sub-deadlines to each task when modeling a problem, the representation of the state space becomes more concise,thereby reducing the complexity of the state space~\cite{xyj01}.This compression significantly reduces the action space that needs to be explored, thereby improving the efficiency of the algorithm.
+
+\subsubsection{Constraints}
+Task Dependency Constraints: Considering the dependencies between tasks,where certain tasks can only be executed after others are completed,reduces the number of invalid action choices,thereby compressing the action space. It was mentioned that due to task dependencies,a task can only be executed after receiving the results of all its predecessor tasks,which implicitly compresses the action space~\cite{zhou01}.\\
+Resource Limitation Constraints: Based on the resource limitations of edge nodes(such as computational power and memory capacity),excluding action options that do not meet the task's resource requirements further narrows down the action space. It was mentioned that the resources of edge clouds(such as CPU resources, memory, and bandwidth)are limited,and task offloading decisions need to consider these resource limitations,thus compressing the action space~\cite{zhou02}.\\
+Time Window Restriction: Focusing only on the current and a future time window of state information,ignoring states that are too distant in the past,helps to reduce the size of the state space.~\cite{zhou01}
+
+\subsubsection{Markov Modeling}
+Define states,actions,and rewards:
+States(S):Include key information such as device load,network latency,and resource utilization.Compress the state space to a manageable size through feature extraction and state clustering.
+Actions(A):Include operations such as task offloading,resource allocation,and service migration.Simplify the action space through action abstraction and hierarchical structuring.
+Rewards(R):Define the reward function based on indicators such as task execution time,energy consumption,and user satisfaction.For example,completing a task on time with low energy consumption can earn a high reward.
+Transition probabilities(P):Define the probability of transitioning to the next state after taking a specific action in a given state.These probabilities can be estimated using historical or simulated data.
+Policy($\pi$):Define the actions to be taken in each state.Dynamic programming,reinforcement learning,and other methods can be used to optimize the policy,maximizing the expected sum of rewards.~\cite{zhou05}
+
 
 \section{Current Challenges and Future Prospects}
-See for resources on formatting math into text and additional help in working with \LaTeX .
 
 \subsection{Challenges}
 
@@ -277,8 +298,42 @@ The challenges outlined above are inherently linked to the practical implementat
 
 \subsection{Future Prospects}
 
+\subsubsection{More Efficient Algorithm Design}
+With the increasing complexity of edge computing environments, future research can explore more efficient algorithms to address edge offloading issues. For instance, by integrating advanced artificial intelligence technologies such as deep learning and reinforcement learning, intelligent algorithms can be developed that can quickly adapt to environmental changes and make accurate offloading decisions. A paper mentions that future work will use game theory methods to solve dynamic and complex offloading problems in cloud-edge scenarios involving multiple devices and mobile sensing,which implies the exploration of more efficient algorithms~\cite{zhou01}. Another paper aims to apply the MRLCO framework to other decision-making problems in MEC systems, such as content caching. Content caching in MEC aims to cache popular content on MEC hosts to achieve high service quality and reduce network traffic. The MRL framework can adapt to this problem by performing "outer loop" training on cloud servers to learn meta-caching strategies, and "inner loop" training on MEC hosts to learn specific caching strategies for each MEC host.~\cite{xyj01}
+
+\subsubsection{Multi-objective Optimization}
+In practical applications,edge offloading needs to consider not only the execution delay of tasks but also multiple objectives such as energy consumption, cost, and service quality.Future research can further explore multi-objective optimization methods to maximize the overall benefits of task offloading. The objective of the task offloading problem is to minimize the total utility of each task, which involves the optimization of multiple objectives including task delay and energy consumption~\cite{zhou02}.
+
+\subsubsection{Cross-layer Collaborative Optimization}
+Edge computing systems consist of multiple layers of resources and networks,such as the device layer, edge layer, and cloud layer. Future research can consider cross-layer collaborative optimization to break down barriers between layers,achieving the global optimal allocation of resources and efficient task offloading. The task offloading problem in the cloud-edge environment mentioned in a paper implies the need for cross-layer collaborative optimization~\cite{zhou01}.
+
+\subsubsection{Dynamic Environmental Adaptability}
+The tasks and resource states in edge computing environments are dynamically changing.Future research can enhance the dynamic adaptability of algorithms,enabling them to quickly adjust offloading strategies in real-time changing environments to ensure the continuity and stability of tasks. A paper emphasizes the need for algorithms to adapt to dynamic cloud-edge environments,indicating a focus on dynamic real-world environmental adaptability~\cite{zhou01}. Another paper mentions that they will implement the solution in an online setting, considering network dynamics and wireless interference and develop a real prototype to demonstrate the effectiveness of the proposed solution.~\cite{xyj02}
+
+\subsubsection{Security and Privacy Protection}
+In the process of edge offloading,the security and privacy of data are important issues.Future research can focus on how to strengthen data security transmission,storage,and processing while ensuring the efficiency of task offloading,preventing data leakage and malicious attacks.Although security and privacy protection are not directly mentioned in the documents,they are important research directions in the field of edge computing.
+
 \section{Conclusion}
-The conclusion goes here.
+
+This survey deeply explores the application of reinforcement learning in edge computing task offloading. Edge computing task offloading encounters numerous difficulties, and reinforcement learning has emerged as a powerful tool to address these issues.
+
+DQN and its improved version D3QN lay the foundation for task offloading decisions. Methods such as Q-learning, D3QN, and MARL achieve optimized task offloading in different scenarios by reasonably defining the state and action spaces and designing reward mechanisms.
+
+In terms of performance improvement, methods like DOQO and TRL have made improvements in aspects such as real-time performance and training cost, but they also have limitations. The compression of action and state spaces reduces computational complexity.
+
+In practical applications, reinforcement learning faces challenges such as high algorithm complexity and latency, device mobility, heterogeneous compatibility, security, and resource management.
+Looking ahead to future research directions:
+
+First, focus on developing more efficient algorithm systems, deeply integrating deep learning, reinforcement learning, and other advanced artificial intelligence technologies to create intelligent algorithms that can quickly respond to dynamic environmental changes and accurately make offloading decisions.
+
+Second, deeply explore multi-objective optimization strategies, comprehensively coordinating multiple factors such as task execution delay, energy consumption, cost, and service quality to maximize the overall benefits of task offloading.
+
+Third, fully promote the cross-layer collaborative optimization process, breaking the resource and network barriers among different layers of the edge computing system and constructing a collaborative ecosystem with globally optimal resource allocation.
+
+Fourth, emphasize strengthening the dynamic environmental adaptability of algorithms to ensure their stable and efficient operation in complex and dynamically changing environments.
+
+Through in-depth research and breakthroughs in these key areas, reinforcement learning is expected to achieve significant technological leaps in the field of edge computing task offloading, effectively promoting the wide application and in-depth integration of edge computing technology in numerous fields, providing solid technical support for various emerging application scenarios, accelerating the construction and development process of the intelligent interconnected world, and leading the innovation and transformation trend in the digital age.
+
 
 
 % \begin{thebibliography}{1}
